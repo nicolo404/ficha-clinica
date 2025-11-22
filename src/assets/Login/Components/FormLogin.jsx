@@ -35,6 +35,11 @@ export default function LoginForm() {
 
     if (!values.password) e.password = "La contraseña es obligatoria";
     else if (values.password.length < 6) e.password = "Mínimo 6 caracteres";
+
+    if(values.email !== "Caro.catrilefmunoz@gmail.com"){
+      e.email = "Correo no registrado";
+    }
+
     setErrors(e);
     return !e.email && !e.password;
   };
@@ -57,7 +62,7 @@ export default function LoginForm() {
         duration: 2500,
         isClosable: true,
       });
-      navigate("/ficha_clinica");
+      navigate("/fichas");
       // Redirigir, e.g. window.location.href = "/dashboard";
     } catch (err) {
       toast({
@@ -80,7 +85,6 @@ export default function LoginForm() {
           <Input
             type="email"
             name="email"
-            placeholder="nombre@hospital.cl"
             value={values.email}
             onChange={onChange}
             autoComplete="username"
