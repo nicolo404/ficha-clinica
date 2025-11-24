@@ -1,7 +1,7 @@
 import axios from "axios";
 import { FichaClinica } from "./fichaClinicaModel";
 
-const url_api = "http://localhost:3000/api/";
+const url_api = "https://ficha-clinica-back.vercel.app/";
 
 export const guardarFichaClinica = async (fichaData) => {
   try {
