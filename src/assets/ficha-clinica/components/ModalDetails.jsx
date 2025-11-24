@@ -58,14 +58,11 @@ export default function FichaDetailModal({ isOpen, onClose, ficha, onEdit }) {
         >
           <HStack justify="space-between" align="start">
             <VStack align="start" spacing={0}>
-              <Text fontWeight="bold">{ficha.paciente}</Text>
+              <Text fontWeight="bold">{ficha.nombre}</Text>
               <Text fontSize="xs" color={subText}>
-                {ficha.rut} · {fichaId}
+                {ficha.rut}
               </Text>
             </VStack>
-            {ficha.estado && (
-              <Badge colorScheme={estadoColor(ficha.estado)}>{ficha.estado}</Badge>
-            )}
           </HStack>
         </ModalHeader>
 
