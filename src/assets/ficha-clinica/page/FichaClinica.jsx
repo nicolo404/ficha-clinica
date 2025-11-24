@@ -16,11 +16,12 @@ import {
 
 import { FichaClinica } from "../api/fichaClinicaModel";
 import { guardarFichaClinica } from "../api/servicios";
+import { useNavigate } from "react-router-dom";
 
 const FichaClinicaPage = () => {
   const [formData, setFormData] = useState(FichaClinica.default());
   const toast = useToast();
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -37,6 +38,10 @@ const FichaClinicaPage = () => {
         isClosable: true,
         colorScheme: "pink",
       });
+      setFormData(FichaClinica.default());
+      // Redirigir a la lista de fichas
+      navigate("/fichas");
+
     } catch (error) {
       console.error("Error al guardar la ficha:", error);
       toast({

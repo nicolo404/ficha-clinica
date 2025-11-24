@@ -12,7 +12,8 @@ export class FichaClinica {
     motivo,
     presionArterial,
     temperatura,
-    frecuenciaCardiaca
+    frecuenciaCardiaca,
+    fechaActualizacion
   ) {
     this.nombre = nombre;
     this.edad = edad;
@@ -25,11 +26,12 @@ export class FichaClinica {
     this.presionArterial = presionArterial;
     this.temperatura = temperatura;
     this.frecuenciaCardiaca = frecuenciaCardiaca;
+    this.fechaActualizacion = fechaActualizacion;
   }
 
   //contructor por defecto
   static default() {
-    return new FichaClinica("", "", "", "", "", "", "", "", "", "", "");
+    return new FichaClinica("", "", "", "", "", "", "", "", "", "", "", "");
   }
 
   //metodo para convertir la ficha clinica a un objeto JSON
@@ -46,6 +48,7 @@ export class FichaClinica {
       presionArterial: this.presionArterial,
       temperatura: this.temperatura,
       frecuenciaCardiaca: this.frecuenciaCardiaca,
+      fechaActualizacion: this.fechaActualizacion,
     };
   }
   //metodo estatico para crear una instancia de FichaClinica a partir de un objeto JSON
@@ -61,7 +64,8 @@ export class FichaClinica {
       json.motivo,
       json.presionArterial,
       json.temperatura,
-      json.frecuenciaCardiaca
+      json.frecuenciaCardiaca,
+      json.fechaActualizacion
     );
   }
 }

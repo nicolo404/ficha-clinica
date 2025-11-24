@@ -1,4 +1,5 @@
 import axios from "axios";
+import { FichaClinica } from "./fichaClinicaModel";
 
 const url_api = "http://localhost:3000/api/";
 
@@ -13,6 +14,16 @@ export const guardarFichaClinica = async (fichaData) => {
     return response.data;
   } catch (error) {
     console.error("Error al guardar la ficha clínica:", error);
+    throw error;
+  }
+};
+
+export const getFichasClinicas = async () => {
+  try {
+    const response = await axios.get(url_api + "fichas-clinica");
+    return response.data;
+  } catch (error) {
+    console.error("Error al obtener las fichas clínicas:", error);
     throw error;
   }
 };

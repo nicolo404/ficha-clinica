@@ -5,12 +5,14 @@ import {
   Input, InputGroup, InputLeftElement, Select,
   Button, IconButton, ButtonGroup,
   Menu, MenuButton, MenuList, MenuItem,
-  Skeleton, useBreakpointValue, useColorModeValue
+  Skeleton, useBreakpointValue, useColorModeValue, useDisclosure
 } from "@chakra-ui/react";
 import {
   SearchIcon, ChevronDownIcon, ViewIcon, EditIcon
 } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { getFichasClinicas } from "../api/servicios";
+import FichaDetailModal from "../components/ModalDetails";
 import { useMemo, useState, useEffect } from "react";
 
 /** Ejemplo de datos (reemplaza con tu fetch) */
@@ -52,16 +54,30 @@ export default function FichasListView() {
   const [orden, setOrden] = useState("recientes");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const cardBg  = useColorModeValue("white", "gray.800");
+  const hoverBg = useColorModeValue("gray.50", "whiteAlpha.50");
 
-  const cardBg = useColorModeValue("white", "gray.800");
+  const [selected, setSelected] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Simula fetch
   useEffect(() => {
     setLoading(true);
-    const t = setTimeout(() => { setData(MOCK); setLoading(false); }, 700);
-    return () => clearTimeout(t);
+    const t = async () => {
+      try {
+        const fichas = await getFichasClinicas();
+        setData(fichas);
+      } catch (error) {
+        console.error("Error al cargar las fichas clínicas:", error);
+        setData([]); // O manejar el error según sea necesario
+      } finally {
+        setLoading(false);
+      }
+    };
+    t();
   }, []);
 
+  
   const filtered = useMemo(() => {
     let list = [...data];
 
@@ -87,7 +103,15 @@ export default function FichasListView() {
 
   const hasData = filtered.length > 0;
 
+  const openDetails = (item) => {
+    console.log("Item seleccionado:", item);
+    setSelected(item);
+    onOpen();
+  };
+  
+  
   return (
+    <>
     <Box>
       {/* Toolbar */}
       <Flex direction={{ base: "column", md: "row" }} gap={3} mb={4} align="stretch">
@@ -97,32 +121,30 @@ export default function FichasListView() {
           </InputLeftElement>
           <Input
             placeholder="Buscar por paciente, RUT o ID"
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
           />
         </InputGroup>
 
         <HStack spacing={3}>
-          <Select
+          {/* <Select
             value={estado}
             onChange={(e) => setEstado(e.target.value)}
             maxW={{ base: "full", md: "200px" }}
           >
             <option value="todos">Todos los estados</option>
-            <option value="Abierta">Abiertas</option>
-            <option value="En revisión">En revisión</option>
-            <option value="Cerrada">Cerradas</option>
-          </Select>
+            <option value="Abierta">Activo</option>
+            <option value="En revision">En revisión</option>
+            <option value="Cerrada">Cerrado</option>
+          </Select> */}
 
-          <Menu>
-            {/* <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+          {/* <Menu>
+            <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
               Orden: {orden === "recientes" ? "Recientes" : "A–Z"}
-            </MenuButton> */}
+            </MenuButton>
             <MenuList>
               <MenuItem onClick={() => setOrden("recientes")}>Más recientes</MenuItem>
               <MenuItem onClick={() => setOrden("alfabetico")}>Alfabético</MenuItem>
             </MenuList>
-          </Menu>
+          </Menu> */}
 
           <Button
             as={Link}
@@ -143,8 +165,8 @@ export default function FichasListView() {
               <Tr>
                 <Th>Paciente</Th>
                 <Th>RUT</Th>
-                <Th>Estado</Th>
-                <Th>Profesional</Th>
+                {/* <Th>Estado</Th> */}
+                {/* <Th>Profesional</Th> */}
                 <Th>Actualización</Th>
                 <Th isNumeric>Acciones</Th>
               </Tr>
@@ -161,23 +183,23 @@ export default function FichasListView() {
                 : hasData
                 ? filtered.map((i) => (
                     // eslint-disable-next-line react-hooks/rules-of-hooks
-                    <Tr key={i.id} _hover={{ bg: useColorModeValue("gray.50", "whiteAlpha.50") }}>
+                    <Tr key={i._id} _hover={{ backgroundColor: hoverBg }}>
                       <Td>
                         <HStack spacing={3}>
-                          <Avatar name={i.paciente} size="sm" />
+                          <Avatar name={i.nombre} size="sm" />
                           <VStack spacing={0} align="start">
-                            <Text fontWeight="semibold">{i.paciente}</Text>
-                            <Text fontSize="xs" color="gray.500">{i.id}</Text>
+                            <Text fontWeight="semibold">{i.nombre}</Text>
+                            {/* <Text fontSize="xs" color="gray.500">{i.id}</Text> */}
                           </VStack>
                         </HStack>
                       </Td>
                       <Td>{i.rut}</Td>
-                      <Td><Badge colorScheme={estadoColor(i.estado)}>{i.estado}</Badge></Td>
-                      <Td>{i.profesional}</Td>
-                      <Td>{i.updatedAt}</Td>
+                      {/* <Td><Badge colorScheme={estadoColor(i.estado)}>{i.estado}</Badge></Td> */}
+                      {/* <Td>{i.profesional}</Td> */}
+                      <Td>{i.fechaActualizacion}</Td>
                       <Td isNumeric>
                         <ButtonGroup size="sm" variant="ghost">
-                          <IconButton as={Link} to={`/fichas/${i.id}`} aria-label="Ver" icon={<ViewIcon />} />
+                          <IconButton onClick={() => openDetails(i)} aria-label="Ver" icon={<ViewIcon />} />
                           <IconButton as={Link} to={`/fichas/${i.id}/editar`} aria-label="Editar" icon={<EditIcon />} />
                         </ButtonGroup>
                       </Td>
@@ -193,6 +215,7 @@ export default function FichasListView() {
             </Tbody>
           </Table>
         </TableContainer>
+        <FichaDetailModal isOpen={isOpen} onClose={onClose} ficha={selected} />
       </Box>
 
       {/* Cards (móvil) */}
@@ -205,30 +228,38 @@ export default function FichasListView() {
               </Box>
             ))
           : hasData
-          ? filtered.map((i) => <FichaCard key={i.id} item={i} />)
+          ? filtered.map((i) => <FichaCard key={i._id} item={i} />)
           : <EmptyState />}
       </Stack>
     </Box>
+</>
   );
 }
 
 function FichaCard({ item }) {
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selected, setSelected] = useState(null);
   const cardBg = useColorModeValue("white", "gray.800");
+  const openDetails = (item) => {
+    setSelected(item);
+    onOpen();
+  };
   return (
     <Box bg={cardBg} borderRadius="xl" p={4} boxShadow="sm">
       <HStack align="start" spacing={3}>
-        <Avatar name={item.paciente} />
+        <Avatar name={item.nombre} />
         <VStack align="start" spacing={1} flex="1">
           <HStack justify="space-between" w="full">
-            <Text fontWeight="semibold">{item.paciente}</Text>
-            <Badge colorScheme={estadoColor(item.estado)}>{item.estado}</Badge>
+            <Text fontWeight="semibold">{item.nombre}</Text>
+
           </HStack>
           <Text fontSize="sm" color="gray.500">{item.id} · {item.rut}</Text>
           <Text fontSize="sm" color="gray.500">
-            {item.profesional} · {item.updatedAt}
+            {item.fechaActualizacion}
           </Text>
           <HStack pt={2}>
-            <Button as={Link} to={`/fichas/${item.id}`} size="sm" leftIcon={<ViewIcon />}>
+            <Button onClick={() => openDetails(item)} size="sm" leftIcon={<ViewIcon />}>
               Ver
             </Button>
             <Button as={Link} to={`/fichas/${item.id}/editar`} size="sm" variant="ghost" leftIcon={<EditIcon />}>
@@ -237,6 +268,7 @@ function FichaCard({ item }) {
           </HStack>
         </VStack>
       </HStack>
+      <FichaDetailModal isOpen={isOpen} onClose={onClose} ficha={selected} />
     </Box>
   );
 }
