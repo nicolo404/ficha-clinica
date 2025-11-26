@@ -19,21 +19,11 @@ export default function LoginPage() {
         p={{ base: 6, md: 10 }}
       >
         <Box maxW="lg">
-          <Image
-            src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png"
-            alt="Logo Salud"
-            boxSize={logoSize}
-            mb={{ base: 4, md: 6 }}
-            opacity={0.9}
-          />
           <Heading size={useBreakpointValue({ base: "md", md: "lg" })} lineHeight="short">
             Portal Clínico
           </Heading>
           <Text mt={3} opacity={0.95}>
             Accede de forma segura a tus herramientas clínicas y registros electrónicos.
-          </Text>
-          <Text mt={8} fontSize="sm" opacity={0.8}>
-            Usa credenciales personales y 2FA cuando esté disponible.
           </Text>
         </Box>
       </Box>
@@ -54,9 +44,9 @@ export default function LoginPage() {
           >
             Iniciar sesión
           </Heading>
-          <Text fontSize={{ base: "xs", sm: "sm" }} color="gray.500" mb={{ base: 4, md: 6 }}>
+          {/* <Text fontSize={{ base: "xs", sm: "sm" }} color="gray.500" mb={{ base: 4, md: 6 }}>
             Ingresa con tus credenciales institucionales
-          </Text>
+          </Text> */}
 
           <LoginForm />
         </Box>

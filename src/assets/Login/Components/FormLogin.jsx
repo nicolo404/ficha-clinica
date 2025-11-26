@@ -81,7 +81,7 @@ export default function LoginForm() {
     <form onSubmit={handleSubmit} noValidate>
       <VStack align="stretch" spacing={4}>
         <FormControl isInvalid={!!errors.email} isRequired>
-          <FormLabel>Correo institucional</FormLabel>
+          <FormLabel>Correo</FormLabel>
           <Input
             type="email"
             name="email"
@@ -132,7 +132,7 @@ export default function LoginForm() {
             Ingresar
         </Button>
 
-        <Link
+        {/* <Link
           href="/recuperar"
           color="teal.600"
           fontSize="sm"
@@ -140,7 +140,7 @@ export default function LoginForm() {
           _hover={{ textDecoration: "underline" }}
         >
           ¿Olvidaste tu contraseña?
-        </Link>
+        </Link> */}
       </VStack>
     </form>
   );
