@@ -104,7 +104,6 @@ export default function FichasListView() {
   const hasData = filtered.length > 0;
 
   const openDetails = (item) => {
-    console.log("Item seleccionado:", item);
     setSelected(item);
     onOpen();
   };
