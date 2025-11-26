@@ -199,7 +199,7 @@ export default function FichasListView() {
                       <Td isNumeric>
                         <ButtonGroup size="sm" variant="ghost">
                           <IconButton onClick={() => openDetails(i)} aria-label="Ver" icon={<ViewIcon />} />
-                          <IconButton as={Link} to={`/fichas/${i.id}/editar`} aria-label="Editar" icon={<EditIcon />} />
+                          {/* <IconButton as={Link} to={`/fichas/${i.id}/editar`} aria-label="Editar" icon={<EditIcon />} /> */}
                         </ButtonGroup>
                       </Td>
                     </Tr>
