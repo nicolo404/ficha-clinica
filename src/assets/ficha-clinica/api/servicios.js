@@ -9,8 +9,10 @@ export const guardarFichaClinica = async (fichaData) => {
       url_api + "create-fichas-clinica",
       fichaData
     );
+    console.log("Ficha clínica guardada:", response);
     return response.data;
   } catch (error) {
+    console.log(error);
     console.error("Error al guardar la ficha clínica:", error);
     throw error;
   }
